@@ -19,7 +19,9 @@ public class TelaLogin extends javax.swing.JFrame {
     PreparedStatement pst = null;
     ResultSet rs = null;
     
+    // metodo criado para logar
     public void logar(){
+        // variavel para armazenar os dados criado no database
         String sql="select * from tbusuarios where login=? and senha=?";
         try {
             //as linhas abaixo prepara a consulta ao banco de dados em função
@@ -27,7 +29,8 @@ public class TelaLogin extends javax.swing.JFrame {
             // conteúdo da váriavel
             pst = conexao.prepareStatement(sql);
             pst.setString(1,txtUsuario.getText());
-            pst.setString(2,txtSenha.getText());
+            String captura = new String(txtSenha.getPassword());
+            pst.setString(2,captura);
             // a linha abaixo executa a query // consulta banco de dados
             rs = pst.executeQuery();
             // se existir usuario e senha correspondente
@@ -51,7 +54,7 @@ public class TelaLogin extends javax.swing.JFrame {
      */
     public TelaLogin() {
         initComponents();
-        getContentPane().setBackground(new Color(175,238,238)); // coloca cor no background
+        getContentPane().setBackground(new Color(240,255,240)); // coloca cor no background
         // inicializando a conexão
         conexao= ModuloConexao.conector();  
         //System.out.println(conexao);

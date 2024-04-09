@@ -5,6 +5,11 @@
  */
 package br.com.infox.telas;
 
+import java.awt.Color;
+import java.text.DateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author phstr
@@ -16,6 +21,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
      */
     public TelaPrincipal() {
         initComponents();
+        getContentPane().setBackground(new Color(240,255,240)); // coloca cor no background
     }
 
     /**
@@ -27,21 +33,182 @@ public class TelaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        lblData = new javax.swing.JLabel();
+        lblusuario = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        menCadastro = new javax.swing.JMenu();
+        menCadastroCliente = new javax.swing.JMenuItem();
+        menOs = new javax.swing.JMenuItem();
+        menCadastroUsuario = new javax.swing.JMenuItem();
+        menRelatorio = new javax.swing.JMenu();
+        menRelatorioServicos = new javax.swing.JMenuItem();
+        menAjuda = new javax.swing.JMenu();
+        menAjudaSobre = new javax.swing.JMenuItem();
+        menOpcoes = new javax.swing.JMenu();
+        menOpSair = new javax.swing.JMenuItem();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("X - Sistema para controle de OS");
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
+
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/o.png"))); // NOI18N
+
+        lblData.setBackground(new java.awt.Color(255, 255, 255));
+        lblData.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblData.setForeground(new java.awt.Color(255, 255, 255));
+        lblData.setText("xx/xx/xx");
+
+        lblusuario.setBackground(new java.awt.Color(255, 255, 255));
+        lblusuario.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblusuario.setForeground(new java.awt.Color(255, 255, 255));
+        lblusuario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblusuario.setText("Usuário");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(53, 53, 53))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(136, Short.MAX_VALUE)
+                .addComponent(lblusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(lblData, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(133, 133, 133)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        menCadastro.setText("Cadastro");
+
+        menCadastroCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
+        menCadastroCliente.setText("Cliente");
+        menCadastro.add(menCadastroCliente);
+
+        menOs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.ALT_MASK));
+        menOs.setText("Os");
+        menOs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menOsActionPerformed(evt);
+            }
+        });
+        menCadastro.add(menOs);
+
+        menCadastroUsuario.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_MASK));
+        menCadastroUsuario.setText("Usuarios");
+        menCadastro.add(menCadastroUsuario);
+
+        jMenuBar1.add(menCadastro);
+
+        menRelatorio.setText("Relatorio");
+
+        menRelatorioServicos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK));
+        menRelatorioServicos.setText("Serviços");
+        menRelatorio.add(menRelatorioServicos);
+
+        jMenuBar1.add(menRelatorio);
+
+        menAjuda.setText("Ajuda");
+        menAjuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menAjudaActionPerformed(evt);
+            }
+        });
+
+        menAjudaSobre.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.ALT_MASK));
+        menAjudaSobre.setText("Sobre");
+        menAjudaSobre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menAjudaSobreActionPerformed(evt);
+            }
+        });
+        menAjuda.add(menAjudaSobre);
+
+        jMenuBar1.add(menAjuda);
+
+        menOpcoes.setText("Opções");
+
+        menOpSair.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
+        menOpSair.setText("Sair");
+        menOpSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menOpSairActionPerformed(evt);
+            }
+        });
+        menOpcoes.add(menOpSair);
+
+        jMenuBar1.add(menOpcoes);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 573, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void menOsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menOsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menOsActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // as linhas abaixo substituem as label  lbldata pela data atual do sistema
+        // ao inicializar o form
+        Date data = new Date();
+        DateFormat formatador = DateFormat.getDateInstance(DateFormat.SHORT);
+        lblData.setText(formatador.format(data));
+        
+        
+    }//GEN-LAST:event_formWindowActivated
+
+    private void menOpSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menOpSairActionPerformed
+        // exibe caixa de dialogo
+        int sair = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja sair ?","Atenção!",JOptionPane.YES_NO_OPTION);
+        if (sair == JOptionPane.YES_OPTION){
+            System.exit(0);
+        }
+        
+        
+    }//GEN-LAST:event_menOpSairActionPerformed
+
+    private void menAjudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menAjudaActionPerformed
+        
+        
+    }//GEN-LAST:event_menAjudaActionPerformed
+
+    private void menAjudaSobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menAjudaSobreActionPerformed
+        // TODO add your handling code here:
+        TelaSobre sobre = new TelaSobre();
+        sobre.setVisible(true);
+    }//GEN-LAST:event_menAjudaSobreActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,5 +246,20 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblData;
+    private javax.swing.JLabel lblusuario;
+    private javax.swing.JMenu menAjuda;
+    private javax.swing.JMenuItem menAjudaSobre;
+    private javax.swing.JMenu menCadastro;
+    private javax.swing.JMenuItem menCadastroCliente;
+    private javax.swing.JMenuItem menCadastroUsuario;
+    private javax.swing.JMenuItem menOpSair;
+    private javax.swing.JMenu menOpcoes;
+    private javax.swing.JMenuItem menOs;
+    private javax.swing.JMenu menRelatorio;
+    private javax.swing.JMenuItem menRelatorioServicos;
     // End of variables declaration//GEN-END:variables
 }

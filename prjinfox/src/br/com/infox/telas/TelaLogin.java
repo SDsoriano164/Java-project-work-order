@@ -15,59 +15,76 @@ import javax.swing.JOptionPane;
  * @author phstr
  */
 public class TelaLogin extends javax.swing.JFrame {
+
     Connection conexao = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
-    
+
     // metodo criado para logar
-    public void logar(){
+    public void logar() {
         // variavel para armazenar os dados criado no database
-        String sql="select * from tbusuarios where login=? and senha=?";
+        String sql = "select * from tbusuarios where login=? and senha=?";
         try {
             //as linhas abaixo prepara a consulta ao banco de dados em função
             //do que for digitado nas caixas de texto. O ? é subustituido pelo 
             // conteúdo da váriavel
             pst = conexao.prepareStatement(sql);
-            pst.setString(1,txtUsuario.getText());
+            pst.setString(1, txtUsuario.getText());
             String captura = new String(txtSenha.getPassword());
-            pst.setString(2,captura);
+            pst.setString(2, captura);
             // a linha abaixo executa a query // consulta banco de dados
             rs = pst.executeQuery();
-            // se existir usuario e senha correspondente
-            if (rs.next()){
-                TelaPrincipal principal;
-                principal = new TelaPrincipal();
-                principal.setVisible(true);
-            }else{
-              
+            // se existir usuario e senha correspondente vai executar
+            if (rs.next()) {
+                // a linha abaixo obtem o conteudo do campo perfil da tabela  tbusuarios
+
+                String perfil = rs.getString(6);
+                System.out.println(perfil);
+                // a estrutura  abaixo faz o tratamento do perfil do usuário
+
+                // verificando se o usuario é admin
+                if (perfil.equals("admin")) {
+                    // libera a aba cadastro usuario e relatorio de serviços se usuario for admin
+                    TelaPrincipal principal = new TelaPrincipal();
+                    principal.setVisible(true);
+                    TelaPrincipal.menCadastroUsuario.setEnabled(true);
+                    TelaPrincipal.menRelatorioServicos.setEnabled(true);
+                    this.dispose();
+                    
+                    
+                  // se não ele vai mostrar a tela principal com o  cadastro e servicos disable
+                } else {
+                    TelaPrincipal principal = new TelaPrincipal();
+                    principal.setVisible(true);
+                    this.dispose();
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "usuário e/ou senha inválidos(s)");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "usuário e/ou senha inválidos(s)");
         }
     }
-    
-    
-   
 
     /**
      * Creates new form TelaLogin
      */
     public TelaLogin() {
         initComponents();
-        getContentPane().setBackground(new Color(240,255,240)); // coloca cor no background
+        getContentPane().setBackground(new Color(240, 255, 240)); // coloca cor no background
         // inicializando a conexão
-        conexao= ModuloConexao.conector();  
+        conexao = ModuloConexao.conector();
         //System.out.println(conexao);
-        if (conexao != null){
+        if (conexao != null) {
             // se a conexão for diferente de null ( conectado )
             // ele vai setar o icone no btnStatus 
             btnStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/iconeconnect.png")));
-           
-        }else{
+
+        } else {
             btnStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/iconeremove.png")));
         }
-        
-        
+
     }
 
     /**
@@ -196,6 +213,7 @@ public class TelaLogin extends javax.swing.JFrame {
 
         // chamando o método logar
         logar();
+
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
@@ -229,8 +247,7 @@ public class TelaLogin extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new TelaLogin().setVisible(true);
-                
-                
+
             }
         });
     }

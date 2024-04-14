@@ -37,18 +37,33 @@ public class TelaLogin extends javax.swing.JFrame {
             // se existir usuario e senha correspondente vai executar
             if (rs.next()) {
                 // a linha abaixo obtem o conteudo do campo perfil da tabela  tbusuarios
+                
+                String perfil = rs.getString(6);  // 6 equivale a coluna do perfil no mySQL
+                
+                String user = rs.getString(2); // 2 equivale a coluna do Usuario do perfil no mySQl
 
-                String perfil = rs.getString(6);
+                // mostra o perfil captado no bdd
                 System.out.println(perfil);
+                 System.out.println(user);
                 // a estrutura  abaixo faz o tratamento do perfil do usuário
 
                 // verificando se o usuario é admin
                 if (perfil.equals("admin")) {
-                    // libera a aba cadastro usuario e relatorio de serviços se usuario for admin
+                    // mostra a tela principal
                     TelaPrincipal principal = new TelaPrincipal();
                     principal.setVisible(true);
+                    // libera a aba cadastro usuario e relatorio de serviços se usuario for admin
                     TelaPrincipal.menCadastroUsuario.setEnabled(true);
                     TelaPrincipal.menRelatorioServicos.setEnabled(true);
+                    
+                    // a linha abaixo muda a cor do texto do lblUser
+                  
+                    TelaPrincipal.lblUser.setForeground(Color.red);
+                   
+                    // a linha abaixo pega a coluna de Usuarios e mostra o valor 
+                    TelaPrincipal.lblUser.setText(user);
+                  
+                   
                     this.dispose();
                     
                     
@@ -58,6 +73,9 @@ public class TelaLogin extends javax.swing.JFrame {
                     principal.setVisible(true);
                     this.dispose();
                 }
+                
+                // assim que entrar o usuario vai ser mostrado na tela principal
+                TelaPrincipal.lblUser.setText(rs.getString(2));
 
             } else {
                 JOptionPane.showMessageDialog(null, "usuário e/ou senha inválidos(s)");
@@ -211,7 +229,7 @@ public class TelaLogin extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
 
-        // chamando o método logar
+        // chamando o método logar // faz a conexcao com o banco e executa toda estrutura da tela principal 
         logar();
 
     }//GEN-LAST:event_btnLoginActionPerformed

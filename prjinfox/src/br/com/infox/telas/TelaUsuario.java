@@ -38,7 +38,8 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
         conexao = ModuloConexao.conector();
        
     }
-        private void consultar(){
+        private void consultar(){ // inicio metodo consultar
+            
             // variavel sql armazendando a consulta na variavel ( cria a query )
             String sql = "select * from tbusuarios where iduser=?"; // ? campo do bdd
             
@@ -66,23 +67,28 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
                     // mostra mensagem de erro se nao for encontrato
                     JOptionPane.showMessageDialog(null,"Usuário não cadastrado !");
                     // limpa os campos
+                    limparCampos();
+              
+                }
+                
+           
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null,e);
+            }
+                 
+        } // fim do metodo consultar
+       
+        
+        private void limparCampos(){
                     txtuserNome.setText(null);
                     txtuserLogin.setText(null); 
                     txtuserFone.setText(null);
                     txtuserSenha.setText(null);
                     cbUsuPerfil.setSelectedItem(null);
                     
-                    
-                    
-                }
-                
-                
-                
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null,e);
-            }
-                
         }
+        
+        
 
     /**
      * This method is called from within the constructor to initialize the form.

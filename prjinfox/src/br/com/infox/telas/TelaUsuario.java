@@ -52,7 +52,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
             // bloco de codigo se der tudo certo
             if (rs.next()) {
                 // mostrar os textos 
-                txtuserNome.setText(rs.getString(2));
+                txtuserNome.setText(rs.getString(2)); // seta os dados cadastrado na tbusuarios
                 txtuserLogin.setText(rs.getString(4));
                 txtuserFone.setText(rs.getString(3));
                 txtuserSenha.setText(rs.getString(5));
@@ -117,7 +117,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
             // preparando conexao
             pst = conexao.prepareStatement(sql);
 
-            // pega os dados da tabela
+            // pega os dados inseridos na tabela e passa para o campos do banco
             pst.setString(1, txtuserNome.getText());
             pst.setString(2, txtuserFone.getText());
             pst.setString(3, txtuserLogin.getText());
@@ -143,8 +143,31 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
+        
 
     }
+    public void deletar(){ // CRUD - DELETE
+        int confirma = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja remover este usuário ?","ATENÇÃO",JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION){
+            String sql = "delete from tbusuarios where iduser = ?";
+           
+            try {
+                pst = conexao.prepareStatement(sql);
+                pst.setString(1, txtuserID.getText());
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Usuario removido com sucesso !");
+                limparCampos();
+                
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+            
+        }        
+    }
+        
+        
+    
 
     private void limparCampos() {
         txtuserID.setText(null);
@@ -233,6 +256,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
         });
 
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/Delete.png"))); // NOI18N
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnCreate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/Create.png"))); // NOI18N
         btnCreate.addActionListener(new java.awt.event.ActionListener() {
@@ -380,6 +408,12 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
         // chamando o metodo alterar
         alterar();
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // DELETE
+        // chamando o metodo remover
+        deletar();
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

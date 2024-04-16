@@ -35,7 +35,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
 
     }
 
-    private void consultar() { // inicio metodo consultar
+    private void consultar() { // CRUD - READ
 
         // variavel sql armazendando a consulta na variavel ( cria a query )
         String sql = "select * from tbusuarios where iduser=?"; // ? campo do bdd
@@ -72,7 +72,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
 
     } // fim do metodo consultar
 
-    private void adicionar() { // metodo para adicionar usuarios
+    private void adicionar() { // metodo para adicionar usuarios CRUD - CREATE
 
         //armazenando dados da consulta do bdd   // codigo mysql para atribuir os valores a string
         String sql = "insert into tbusuarios (iduser,usuario,fone,login,senha,perfil)values(?,?,?,?,?,?)";
@@ -95,7 +95,6 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
             } else {
 
                 // a linha abaixo atualiza a tbusuarios com os dados do formulario    
-                // a estrutura é utilizada para confirmar a inserção dos dado na tabela
                 int adicionado = pst.executeUpdate();
 
                 if (adicionado > 0) {
@@ -111,13 +110,48 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
 
     }
 
+    // criando metodo para alterar dados do usuario  Crud - update
+    public void alterar() {
+        String sql = "update tbusuarios set usuario = ?, fone = ?, login = ?, senha = ?, perfil = ? where iduser = ?";
+        try {
+            // preparando conexao
+            pst = conexao.prepareStatement(sql);
+
+            // pega os dados da tabela
+            pst.setString(1, txtuserNome.getText());
+            pst.setString(2, txtuserFone.getText());
+            pst.setString(3, txtuserLogin.getText());
+            pst.setString(4, txtuserSenha.getText());
+            pst.setString(5, cbUsuPerfil.getSelectedItem().toString());
+            pst.setString(6, txtuserID.getText());
+
+            // teste para verificar se os dados obrigatórios foram todos preenchidos.
+            if (txtuserID.getText().isEmpty() || txtuserNome.getText().isEmpty() || txtuserLogin.getText().isEmpty() || txtuserSenha.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios !");
+
+            } else {
+
+                // a estrutura abaixo serve para confirmar a alteração dos dados da tabela
+                int adicionado = pst.executeUpdate();
+
+                if (adicionado > 0) {
+                    JOptionPane.showMessageDialog(null, "Dados do usuário atualizado com sucesso !");
+                    limparCampos();
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+
+    }
+
     private void limparCampos() {
         txtuserID.setText(null);
         txtuserNome.setText(null);
         txtuserLogin.setText(null);
         txtuserFone.setText(null);
         txtuserSenha.setText(null);
-        
 
     }
 
@@ -215,6 +249,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
         });
 
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/Update.png"))); // NOI18N
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("* Campos Obrigatórios");
 
@@ -335,6 +374,12 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
         //chamando o metodo adicionar
         adicionar();
     }//GEN-LAST:event_btnCreateActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // UPDATE
+        // chamando o metodo alterar
+        alterar();
+    }//GEN-LAST:event_btnUpdateActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

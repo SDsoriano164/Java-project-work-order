@@ -77,9 +77,55 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
             }
                  
         } // fim do metodo consultar
+        
+        
+        private void adicionar(){ // metodo para adicionar usuarios
+            
+            //armazenando dados da consulta do bdd   // codigo mysql para atribuir os valores a string
+            String sql = "insert into tbusuarios (iduser,usuario,fone,login,senha,perfil)values(?,?,?,?,?,?)";
+         
+            try {
+                // preparando conexcao
+                pst = conexao.prepareStatement(sql);
+                
+                // pega os dados da conexcao do campos.
+                                                                    
+                pst.setString(1,txtuserID.getText()); // passando os parametros 1 -iduser
+                pst.setString(2,txtuserNome.getText()); // 2-
+                pst.setString(3,txtuserFone.getText());
+                pst.setString(4, txtuserLogin.getText());
+                pst.setString(5, txtuserSenha.getText());
+                pst.setString(6,cbUsuPerfil.getSelectedItem().toString());
+                
+                // a linha abaixo atualiza a tbusuarios com os dad do formulario
+              
+                
+               // a estrutura é utilizada para confirmar a inserção dos dado na tabela
+               int adicionado = pst.executeUpdate();
+               
+               // serve de apoio ao entendimento da lógica
+               
+                System.out.println(adicionado);
+               if (adicionado > 0){
+                   JOptionPane.showMessageDialog(null, "Cadastrado com sucesso !");
+                   limparCampos();
+               }
+  
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null,e);
+                
+            }
+            
+            
+           
+        }
+        
+        
+        
        
         
         private void limparCampos(){
+                    txtuserID.setText(null);
                     txtuserNome.setText(null);
                     txtuserLogin.setText(null); 
                     txtuserFone.setText(null);
@@ -169,6 +215,11 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/Delete.png"))); // NOI18N
 
         btnCreate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/Create.png"))); // NOI18N
+        btnCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateActionPerformed(evt);
+            }
+        });
 
         btnRead.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/Read.png"))); // NOI18N
         btnRead.addActionListener(new java.awt.event.ActionListener() {
@@ -281,9 +332,15 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
     }//GEN-LAST:event_cbUsuPerfilActionPerformed
 
     private void btnReadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReadActionPerformed
-        // TODO add your handling code here:
+        // INSERT
         consultar();
     }//GEN-LAST:event_btnReadActionPerformed
+
+    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+         // CREATE
+        //chamando o metodo adicionar
+        adicionar();
+    }//GEN-LAST:event_btnCreateActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

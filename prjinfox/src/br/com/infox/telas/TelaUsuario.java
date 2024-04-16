@@ -10,22 +10,18 @@ import java.sql.*; // importanto connector
 import br.com.infox.dal.ModuloConexao; // importando o modulo criado para conexcao com o banco
 import javax.swing.JOptionPane;
 
-
-
-
 /**
  *
  * @author phstr
  */
 public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e atributos da clase JinternalFrame
-    
+
     // variaveis criada para fazer a conexcao e pegar os dados do bdd // 
     // sempre que for solicitado dados do bancos de dados, tem que ser feito isso.
-    
     Connection conexao = null;
-    
+
     PreparedStatement pst = null;
-            
+
     ResultSet rs = null;
 
     /**
@@ -36,105 +32,94 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
         getContentPane().setBackground(new Color(240, 255, 240)); // coloca cor no background
         // chamando a conexcao do modulo conector
         conexao = ModuloConexao.conector();
-       
+
     }
-        private void consultar(){ // inicio metodo consultar
-            
-            // variavel sql armazendando a consulta na variavel ( cria a query )
-            String sql = "select * from tbusuarios where iduser=?"; // ? campo do bdd
-            
-            
-            try {
-                // prepara a conexao
-                pst =conexao.prepareStatement(sql);
-                // seta o valor da variavel para o campo solicitado
-                pst.setString(1,txtuserID.getText());  // primeiro parametro da consulta // vai retornar o valor digitado equivalente
-                // se criarmos outro parametro ele só vai executar da forma correta se definirmos igual ao bdd
-               
-                // executa a query
-   
-                rs = pst.executeQuery();
-                // bloco de codigo se der tudo certo
-                if (rs.next()) {
-                    txtuserNome.setText(rs.getString(2));
-                    txtuserLogin.setText(rs.getString(4)); // pega o segundo campo da tabela
-                    txtuserFone.setText(rs.getString(3));
-                    txtuserSenha.setText(rs.getString(5));
-                   cbUsuPerfil.setSelectedItem(rs.getString(6));
-                   
-                   
-                } else {
-                    // mostra mensagem de erro se nao for encontrato
-                    JOptionPane.showMessageDialog(null,"Usuário não cadastrado !");
-                    // limpa os campos
+
+    private void consultar() { // inicio metodo consultar
+
+        // variavel sql armazendando a consulta na variavel ( cria a query )
+        String sql = "select * from tbusuarios where iduser=?"; // ? campo do bdd
+
+        try {
+            // prepara a conexao
+            pst = conexao.prepareStatement(sql);
+            // seta o valor da variavel para o campo solicitado
+            pst.setString(1, txtuserID.getText());  // primeiro parametro da consulta // vai retornar o valor digitado equivalente
+            // se criarmos outro parametro ele só vai executar da forma correta se definirmos igual ao bdd
+
+            // executa a query
+            rs = pst.executeQuery();
+            // bloco de codigo se der tudo certo
+            if (rs.next()) {
+                // mostrar os textos 
+                txtuserNome.setText(rs.getString(2));
+                txtuserLogin.setText(rs.getString(4));
+                txtuserFone.setText(rs.getString(3));
+                txtuserSenha.setText(rs.getString(5));
+                cbUsuPerfil.setSelectedItem(rs.getString(6));
+
+            } else {
+                // mostra mensagem de erro se nao for encontrato
+                JOptionPane.showMessageDialog(null, "Usuário não cadastrado !");
+                // limpa os campos
+                limparCampos();
+
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+
+    } // fim do metodo consultar
+
+    private void adicionar() { // metodo para adicionar usuarios
+
+        //armazenando dados da consulta do bdd   // codigo mysql para atribuir os valores a string
+        String sql = "insert into tbusuarios (iduser,usuario,fone,login,senha,perfil)values(?,?,?,?,?,?)";
+
+        try {
+            // preparando conexcao
+            pst = conexao.prepareStatement(sql);
+
+            // pega os dados da conexcao do campos.
+            pst.setString(1, txtuserID.getText()); // passando os parametros 1 -iduser
+            pst.setString(2, txtuserNome.getText());
+            pst.setString(3, txtuserFone.getText());
+            pst.setString(4, txtuserLogin.getText());
+            pst.setString(5, txtuserSenha.getText());
+            pst.setString(6, cbUsuPerfil.getSelectedItem().toString());
+
+            if (txtuserID.getText().isEmpty() || txtuserNome.getText().isEmpty() || txtuserLogin.getText().isEmpty() || txtuserSenha.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios !");
+
+            } else {
+
+                // a linha abaixo atualiza a tbusuarios com os dados do formulario    
+                // a estrutura é utilizada para confirmar a inserção dos dado na tabela
+                int adicionado = pst.executeUpdate();
+
+                if (adicionado > 0) {
+                    JOptionPane.showMessageDialog(null, "Cadastrado com sucesso !");
                     limparCampos();
-              
                 }
-                
-           
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null,e);
             }
-                 
-        } // fim do metodo consultar
-        
-        
-        private void adicionar(){ // metodo para adicionar usuarios
-            
-            //armazenando dados da consulta do bdd   // codigo mysql para atribuir os valores a string
-            String sql = "insert into tbusuarios (iduser,usuario,fone,login,senha,perfil)values(?,?,?,?,?,?)";
-         
-            try {
-                // preparando conexcao
-                pst = conexao.prepareStatement(sql);
-                
-                // pega os dados da conexcao do campos.
-                                                                    
-                pst.setString(1,txtuserID.getText()); // passando os parametros 1 -iduser
-                pst.setString(2,txtuserNome.getText()); // 2-
-                pst.setString(3,txtuserFone.getText());
-                pst.setString(4, txtuserLogin.getText());
-                pst.setString(5, txtuserSenha.getText());
-                pst.setString(6,cbUsuPerfil.getSelectedItem().toString());
-                
-                // a linha abaixo atualiza a tbusuarios com os dad do formulario
-              
-                
-               // a estrutura é utilizada para confirmar a inserção dos dado na tabela
-               int adicionado = pst.executeUpdate();
-               
-               // serve de apoio ao entendimento da lógica
-               
-                System.out.println(adicionado);
-               if (adicionado > 0){
-                   JOptionPane.showMessageDialog(null, "Cadastrado com sucesso !");
-                   limparCampos();
-               }
-  
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null,e);
-                
-            }
-            
-            
-           
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+
         }
+
+    }
+
+    private void limparCampos() {
+        txtuserID.setText(null);
+        txtuserNome.setText(null);
+        txtuserLogin.setText(null);
+        txtuserFone.setText(null);
+        txtuserSenha.setText(null);
         
-        
-        
-       
-        
-        private void limparCampos(){
-                    txtuserID.setText(null);
-                    txtuserNome.setText(null);
-                    txtuserLogin.setText(null); 
-                    txtuserFone.setText(null);
-                    txtuserSenha.setText(null);
-                    cbUsuPerfil.setSelectedItem(null);
-                    
-        }
-        
-        
+
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -161,6 +146,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
         btnCreate = new javax.swing.JButton();
         btnRead = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -169,15 +155,15 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
         setName("Usuário"); // NOI18N
         setPreferredSize(new java.awt.Dimension(545, 461));
 
-        jLabel1.setText("ID");
+        jLabel1.setText("*ID");
 
-        jLabel2.setText("Nome");
+        jLabel2.setText("*Nome");
 
-        jLabel3.setText("Login");
+        jLabel3.setText("*Login");
 
-        jLabel4.setText("Senha");
+        jLabel4.setText("*Senha");
 
-        jLabel5.setText("Perfil");
+        jLabel5.setText("*Perfil");
 
         txtuserNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -204,7 +190,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
             }
         });
 
-        jLabel6.setText("Fone ");
+        jLabel6.setText("*Fone ");
 
         txtuserSenha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -229,6 +215,8 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
         });
 
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/Update.png"))); // NOI18N
+
+        jLabel7.setText("* Campos Obrigatórios");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -272,12 +260,18 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
                         .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(87, Short.MAX_VALUE))
+                .addContainerGap(81, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(145, 145, 145))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(65, 65, 65)
+                .addGap(24, 24, 24)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtuserID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -337,7 +331,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
     }//GEN-LAST:event_btnReadActionPerformed
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-         // CREATE
+        // CREATE
         //chamando o metodo adicionar
         adicionar();
     }//GEN-LAST:event_btnCreateActionPerformed
@@ -355,6 +349,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame { // usa os campos e
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField txtuserFone;
     private javax.swing.JTextField txtuserID;
     private javax.swing.JTextField txtuserLogin;

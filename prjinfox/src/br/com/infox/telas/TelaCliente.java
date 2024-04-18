@@ -101,7 +101,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
     }
 
     public void pesquisarClientes() {
-        String sql = "select * from tbclientes where nomecli like ?";
+        String sql = "select idcli as id, nomecli as nome, endcli as endereco, fonecli as fone, emailcli as email from tbclientes where nomecli like ?";
 
         try {
             pst = conexao.prepareStatement(sql);
@@ -233,13 +233,13 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nome", "Endereço", "Fone", "Email"
             }
         ));
         tblClientes.addMouseListener(new java.awt.event.MouseAdapter() {

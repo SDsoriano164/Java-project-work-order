@@ -231,6 +231,11 @@ public class TelaCliente extends javax.swing.JInternalFrame {
             }
         });
 
+        tblClientes = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -242,6 +247,8 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                 "ID", "Nome", "Endereço", "Fone", "Email"
             }
         ));
+        tblClientes.getTableHeader().setResizingAllowed(false);
+        tblClientes.getTableHeader().setReorderingAllowed(false);
         tblClientes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblClientesMouseClicked(evt);

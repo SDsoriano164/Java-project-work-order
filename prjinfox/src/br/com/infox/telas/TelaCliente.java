@@ -89,6 +89,8 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                 if (adicionado > 0){
                     JOptionPane.showMessageDialog(null, "Dados do cliente atualizados com sucesso ! ");
                     limparCampos();
+                    // ativando botao apos altera os dados da tabelaclientes
+                    btnCreate.setEnabled(true);
                 }
                 
             }

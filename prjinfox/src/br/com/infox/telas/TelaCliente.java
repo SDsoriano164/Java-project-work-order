@@ -120,6 +120,27 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 
  
 }
+     public void deletar(){ // CRUD - DELETE
+        int confirma = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja remover este cliente ?","ATENÇÃO",JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION){
+            String sql = "delete from tbclientes where idcli = ?";
+           
+            try {
+                pst = conexao.prepareStatement(sql);
+                pst.setString(1, txtID.getText());
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Usuario removido com sucesso !");
+                limparCampos();
+                btnCreate.setVisible(true);
+                
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+            
+        }        
+    }
+    
 
   
 
@@ -159,7 +180,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         btnCreate = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblClientes = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
@@ -203,7 +224,12 @@ public class TelaCliente extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/Delete.png"))); // NOI18N
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/Delete.png"))); // NOI18N
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -276,7 +302,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(112, 112, 112)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addGap(260, 260, 260))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -335,7 +361,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(125, 125, 125))
         );
 
@@ -353,23 +379,33 @@ public class TelaCliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtpesquisaCliKeyReleased
 
     private void tblClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClientesMouseClicked
+        // crud Setando campos da tabela tblclientes
         // o evento abaixo seta os campos da tabela
         preencherFormulario();
     }//GEN-LAST:event_tblClientesMouseClicked
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        atualizar   ();
+        // CRUD UPDATE- ATUALIZA OS CAMPOS DO CLIENTE DA TABELA
+        atualizar();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIDActionPerformed
 
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // CRUD - DELETE
+        // DELETA OS CAMPOS DO CLIENTE DA TABELA
+        deletar();
+        
+        
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

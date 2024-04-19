@@ -20,7 +20,7 @@ public class TelaLogin extends javax.swing.JFrame {
     PreparedStatement pst = null;
     ResultSet rs = null;
 
-    // metodo criado para logar
+    // metodo criado para logar // chamado quando clicamos no botão login
     public void logar() {
         // variavel para armazenar os dados criado no database
         String sql = "select * from tbusuarios where login=? and senha=?";
@@ -40,7 +40,7 @@ public class TelaLogin extends javax.swing.JFrame {
                 
                 String perfil = rs.getString(6);  // 6 equivale a coluna do perfil no mySQL
                 
-                String user = rs.getString(2); // 2 equivale a coluna do Usuario do perfil no mySQl
+                String user = rs.getString(2); // 2 equivale a coluna do nome do Usuario do perfil no mySQl
 
                 // mostra o perfil captado no bdd
                 System.out.println(perfil);
@@ -128,10 +128,10 @@ public class TelaLogin extends javax.swing.JFrame {
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/user.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/4781818_account_avatar_face_man_people_icon.png"))); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/password.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\phstr\\Downloads\\9021590_password_bold_icon.png")); // NOI18N
 
         txtUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,6 +147,11 @@ public class TelaLogin extends javax.swing.JFrame {
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
+            }
+        });
+        btnLogin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnLoginKeyPressed(evt);
             }
         });
 
@@ -231,8 +236,14 @@ public class TelaLogin extends javax.swing.JFrame {
 
         // chamando o método logar // faz a conexcao com o banco e executa toda estrutura da tela principal 
         logar();
+        
 
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void btnLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnLoginKeyPressed
+        // TODO add your handling code here:
+        logar();
+    }//GEN-LAST:event_btnLoginKeyPressed
 
     /**
      * @param args the command line arguments

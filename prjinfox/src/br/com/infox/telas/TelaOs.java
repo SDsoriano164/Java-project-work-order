@@ -59,6 +59,57 @@ public class TelaOs extends javax.swing.JInternalFrame {
         txtclienteID.setText(tblclientesOS.getModel().getValueAt(setar,0).toString());
     }
     
+    // metodo criado para preencher campos da OS
+    private  void emitirOS(){
+       String sql = "INSERT INTO tbos (tipo, situacao, equipamento, defeito, servico, tecnico, valor, idcli) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1,tipo);
+            pst.setString(2, cboxOsSit.getSelectedItem().toString());
+            pst.setString(3, txtOsEquip.getText());
+            pst.setString(4, txtDef.getText());
+            pst.setString(5,txtOsServ.getText());
+            pst.setString(6, txtOsTec.getText());
+            // .replace substitui a virgula pelo ponto.
+            pst.setString(7, txtOsValor.getText().replace(",", "."));
+            pst.setString(8, txtclienteID.getText());
+            
+            if ((txtclienteID.getText().isEmpty()) || (txtOsEquip.getText().isEmpty()) || (txtDef.getText().isEmpty())) {
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios !");
+                
+               
+                
+            } else {
+                int adicionado = pst.executeUpdate();
+                if(adicionado > 0){
+                    JOptionPane.showMessageDialog(null, "Ordem de serviço emitida com sucesso !");
+                    clearFields();
+                    
+                }
+            }
+            
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+            System.out.println(e);
+            
+        }
+        
+    }
+    
+    private void clearFields(){
+        txtOsEquip.setText(null);
+        txtDef.setText(null);
+        txtOsServ.setText(null);
+        txtOsTec.setText(null);
+        txtOsValor.setText(null);
+        txtclienteID.setText(null);
+        
+    }
+    
+    
     
     
     
@@ -346,6 +397,8 @@ public class TelaOs extends javax.swing.JInternalFrame {
         jLabel10.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel10.setText("Valor Total");
 
+        txtOsValor.setText("0");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -480,7 +533,8 @@ public class TelaOs extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtDataActionPerformed
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-        // TODO add your handling code here:
+     //botao para emitir OS
+         emitirOS();
     }//GEN-LAST:event_btnCreateActionPerformed
 
     private void btnReadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReadActionPerformed

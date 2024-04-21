@@ -18,6 +18,9 @@
     <SyntheticProperty name="generatePosition" type="boolean" value="true"/>
     <SyntheticProperty name="generateSize" type="boolean" value="true"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="internalFrameOpened" listener="javax.swing.event.InternalFrameListener" parameters="javax.swing.event.InternalFrameEvent" handler="formInternalFrameOpened"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -182,6 +185,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Or&#xe7;amento"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbtOrcActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="rbtOs">
           <Properties>
@@ -193,6 +199,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Ordem de servi&#xe7;o"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbtOsActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -208,12 +217,12 @@
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="7">
-            <StringItem index="0" value="Entrega Ok"/>
-            <StringItem index="1" value="Or&#xe7;amento REPROVADO"/>
-            <StringItem index="2" value="Aguardando APROVA&#xc7;&#xc3;O"/>
-            <StringItem index="3" value="Aguardando pe&#xe7;as"/>
-            <StringItem index="4" value="Abandonado pelo client"/>
-            <StringItem index="5" value="Na bancada"/>
+            <StringItem index="0" value="Na bancada"/>
+            <StringItem index="1" value="Entrega Ok"/>
+            <StringItem index="2" value="Or&#xe7;amento REPROVADO"/>
+            <StringItem index="3" value="Aguardando APROVA&#xc7;&#xc3;O"/>
+            <StringItem index="4" value="Aguardando pe&#xe7;as"/>
+            <StringItem index="5" value="Abandonado pelo client"/>
             <StringItem index="6" value="Retornou"/>
           </StringArray>
         </Property>

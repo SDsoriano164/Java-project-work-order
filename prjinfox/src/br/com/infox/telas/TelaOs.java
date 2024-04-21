@@ -18,6 +18,10 @@ public class TelaOs extends javax.swing.JInternalFrame {
         Connection conexao = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
+       
+        // criando variavel para armazenar texto de acordo com o RadioButton selecionado
+        private String tipo;
+        
     
     
 
@@ -50,9 +54,12 @@ public class TelaOs extends javax.swing.JInternalFrame {
         
     }
     private void setaCampos(){
+        // setando ID
         int setar = tblclientesOS.getSelectedRow();
         txtclienteID.setText(tblclientesOS.getModel().getValueAt(setar,0).toString());
     }
+    
+    
     
     
     
@@ -107,6 +114,23 @@ public class TelaOs extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setTitle("Ordem de Serviço");
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameOpened(evt);
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -128,10 +152,20 @@ public class TelaOs extends javax.swing.JInternalFrame {
         buttonGroup1.add(rbtOrc);
         rbtOrc.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
         rbtOrc.setText("Orçamento");
+        rbtOrc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtOrcActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(rbtOs);
         rbtOs.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
         rbtOs.setText("Ordem de serviço");
+        rbtOs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtOsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -176,7 +210,7 @@ public class TelaOs extends javax.swing.JInternalFrame {
         jLabel3.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
         jLabel3.setText("Situação");
 
-        cboxOsSit.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Entrega Ok", "Orçamento REPROVADO", "Aguardando APROVAÇÃO", "Aguardando peças", "Abandonado pelo client", "Na bancada", "Retornou" }));
+        cboxOsSit.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Na bancada", "Entrega Ok", "Orçamento REPROVADO", "Aguardando APROVAÇÃO", "Aguardando peças", "Abandonado pelo client", "Retornou" }));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cliente", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 14))); // NOI18N
         jPanel2.setToolTipText("");
@@ -474,6 +508,26 @@ public class TelaOs extends javax.swing.JInternalFrame {
         // chamando o metodo setarcampos();
         setaCampos();
     }//GEN-LAST:event_tblclientesOSMouseClicked
+
+    private void rbtOrcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtOrcActionPerformed
+        // atribuindo um texto a variavel tipo se selecionado
+        tipo = "Orçamento";
+    }//GEN-LAST:event_rbtOrcActionPerformed
+
+    private void rbtOsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtOsActionPerformed
+        // criado para predefinir na tabela pois no bdd ele não é nullo entao tem que ser preenchido
+        // atribuindo um texto a variavel tipo se selecionado para preencher no bdd
+        tipo = "Ordem de serviço";
+        
+    }//GEN-LAST:event_rbtOsActionPerformed
+
+    private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
+        // programa ação ao form marca o radion button orçamento
+        rbtOrc.setSelected(true);
+        // preenchendo no bdd
+        tipo = "Orçamento";
+       
+    }//GEN-LAST:event_formInternalFrameOpened
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

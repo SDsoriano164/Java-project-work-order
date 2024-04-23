@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package br.com.infox.telas;
+
 import java.sql.*;
 import br.com.infox.dal.ModuloConexao;
 import javax.swing.JOptionPane;
@@ -15,26 +16,25 @@ import net.proteanit.sql.DbUtils;
  * @author phstr
  */
 public class TelaOs extends javax.swing.JInternalFrame {
-        Connection conexao = null;
-        PreparedStatement pst = null;
-        ResultSet rs = null;
-       
-        // criando variavel para armazenar texto de acordo com o RadioButton selecionado
-        private String tipo;
-        
-  
+
+    Connection conexao = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+
+    // criando variavel para armazenar texto de acordo com o RadioButton selecionado
+    private String tipo;
 
     /**
      * Creates new form telaOs
      */
     public TelaOs() {
         initComponents();
-        getContentPane().setBackground(new Color(135,206,250));
+        getContentPane().setBackground(new Color(135, 206, 250));
         conexao = ModuloConexao.conector();
     }
-    
+
     // pesquisando cliente
-    private void pesquisaCliente(){
+    private void pesquisaCliente() {
         String sql = "SELECT idcli AS Id, nomecli AS Nome, fonecli AS Fone FROM tbclientes WHERE nomecli LIKE ?";
 
         try {
@@ -43,170 +43,181 @@ public class TelaOs extends javax.swing.JInternalFrame {
             pst.setString(1, txtPesquisaCliente.getText() + "%");
             rs = pst.executeQuery();
             tblclientesOS.setModel(DbUtils.resultSetToTableModel(rs));
-            
-            
-            
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
             System.out.println(e);
         }
-        
+
     }
+
     // setando campo do id
-    private void setaCampos(){
+    private void setaCampos() {
         // setando ID
         int setar = tblclientesOS.getSelectedRow();
-        txtclienteID.setText(tblclientesOS.getModel().getValueAt(setar,0).toString());
+        txtclienteID.setText(tblclientesOS.getModel().getValueAt(setar, 0).toString());
     }
-    
-    // metodo criado para preencher campos da OS
-    private  void emitirOS(){
-       String sql = "INSERT INTO tbos (tipo, situacao, equipamento, defeito, servico, tecnico, valor, idcli) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        
+    // metodo criado para preencher campos da OS
+    private void emitirOS() {
+        String sql = "INSERT INTO tbos (tipo, situacao, equipamento, defeito, servico, tecnico, valor, idcli) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
         try {
             pst = conexao.prepareStatement(sql);
-            pst.setString(1,tipo);
+            pst.setString(1, tipo);
             pst.setString(2, cboxOsSit.getSelectedItem().toString());
             pst.setString(3, txtOsEquip.getText());
             pst.setString(4, txtDef.getText());
-            pst.setString(5,txtOsServ.getText());
+            pst.setString(5, txtOsServ.getText());
             pst.setString(6, txtOsTec.getText());
             // .replace substitui a virgula pelo ponto.
             pst.setString(7, txtOsValor.getText().replace(",", "."));
             pst.setString(8, txtclienteID.getText());
-            
+
             if ((txtclienteID.getText().isEmpty()) || (txtOsEquip.getText().isEmpty()) || (txtDef.getText().isEmpty())) {
                 JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios !");
-                
-               
-                
+
             } else {
                 int adicionado = pst.executeUpdate();
-                if(adicionado > 0){
+                if (adicionado > 0) {
                     JOptionPane.showMessageDialog(null, "Ordem de serviço emitida com sucesso !");
                     clearFields();
-                    
+
                 }
             }
-            
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
             System.out.println(e);
-            
+
         }
-        
+
     }
-    
-    private void pesquisarOs(){
+
+    private void pesquisarOs() {
         // a linha abaixo cria uma caixa de entrada do tipo JOption pane
         String num_os = JOptionPane.showInputDialog("Numero da Ordem de serviço");
         String sql = "select * from tbos where os = " + num_os;
         try {
             pst = conexao.prepareStatement(sql);
             rs = pst.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 txtOs.setText(rs.getString(1));
                 txtData.setText(rs.getString(2));
-                
+
                 // setando os radioButtons
                 String rbtipo = rs.getString(3);
                 if (rbtipo.equals("OS")) {
                     rbtOs.setSelected(true);
                     tipo = "OS";
-                    
+
                 } else {
                     rbtOrc.setSelected(true);
                     tipo = "Orçamento";
                 }
                 // combox situacao
                 cboxOsSit.setSelectedItem(rs.getString(4));
-                
+
                 txtOsEquip.setText(rs.getString(5));
                 txtDef.setText(rs.getString(6));
                 txtOsServ.setText(rs.getString(7));
                 txtOsTec.setText(rs.getString(8));
                 txtOsValor.setText(rs.getString(9));
                 txtclienteID.setText(rs.getString(10));
-                
-                
+
                 // evitando erros e problemas;
-                
                 // acesso a criação de orçamento
                 btnCreate.setEnabled(false);
-                
+
                 //pesquisa de clientes
                 txtPesquisaCliente.setEnabled(false);
-                
+
                 //visibilidade da tabela
-               
                 tblclientesOS.setVisible(false);
-                
-                
-                
-                
-                
-            }else{
+
+            } else {
                 JOptionPane.showMessageDialog(null, "Ordem de serviço não cadastrada");
-                
+
             }
-           
+
         } catch (java.sql.SQLSyntaxErrorException e) {
             JOptionPane.showMessageDialog(null, "OS Inválida");
             System.out.println(e);
-        } catch (Exception e2){
+        } catch (Exception e2) {
             JOptionPane.showMessageDialog(null, e2);
         }
-        
-        
+
     }
-    private void alterarOS(){
-            String sql = "Update tbos set tipo = ?, situacao = ? , equipamento = ? ,defeito = ?, servico = ?, tecnico = ?, valor = ? where os = ? ";
-            try {
+
+    private void alterarOS() {
+        String sql = "Update tbos set tipo = ?, situacao = ? , equipamento = ? ,defeito = ?, servico = ?, tecnico = ?, valor = ? where os = ? ";
+        try {
             pst = conexao.prepareStatement(sql);
-            pst.setString(1,tipo);
+            pst.setString(1, tipo);
             pst.setString(2, cboxOsSit.getSelectedItem().toString());
             pst.setString(3, txtOsEquip.getText());
             pst.setString(4, txtDef.getText());
-            pst.setString(5,txtOsServ.getText());
+            pst.setString(5, txtOsServ.getText());
             pst.setString(6, txtOsTec.getText());
             // .replace substitui a virgula pelo ponto.
             pst.setString(7, txtOsValor.getText().replace(",", "."));
             pst.setString(8, txtclienteID.getText());
             if ((txtclienteID.getText().isEmpty()) || (txtOsEquip.getText().isEmpty()) || (txtDef.getText().isEmpty())) {
                 JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios !");
-                
-               
-                
+
             } else {
                 int adicionado = pst.executeUpdate();
-                if(adicionado > 0){
+                if (adicionado > 0) {
                     JOptionPane.showMessageDialog(null, "Ordem de serviço alterada com sucesso !");
                     clearFields();
-                    
+
                     // reabilidando campos
                     btnCreate.setEnabled(true);
                     txtPesquisaCliente.setEnabled(true);
                     tblclientesOS.setVisible(true);
-                    
+
                 }
             }
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
             System.out.println(e);
         }
-            
-            
+
     }
-   
-    
-    
-    
+
+    private void deletarOs() {
+        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que quer remover ordem de serviço ?", "ATENÇÃO", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            String sql = "delete from tbos where os = ?";
+            try {
+                pst = conexao.prepareStatement(sql);
+                pst.setString(1, txtOs.getText());
+
+                int apagado = pst.executeUpdate();
+                if (apagado > 0) {
+                    JOptionPane.showMessageDialog(null, "OS removida com sucesso !");
+                    
+                    // reabilidando campos
+                    
+                    btnCreate.setEnabled(true);
+                    txtPesquisaCliente.setEnabled(true);
+                    tblclientesOS.setVisible(true);
+                    
+                    // limpa campos 
+                    clearFields();
+
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+                System.out.println(e);
+            }
+        }
+    }
+
     // limpando campos
-    private void clearFields(){
+    private void clearFields() {
         txtOs.setText(null);
         txtData.setText(null);
         txtOsEquip.setText(null);
@@ -215,16 +226,8 @@ public class TelaOs extends javax.swing.JInternalFrame {
         txtOsTec.setText(null);
         txtOsValor.setText(null);
         txtclienteID.setText(null);
-        
+
     }
-    
-    
-    
-    
-    
-    
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -642,8 +645,8 @@ public class TelaOs extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtDataActionPerformed
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-     //botao para emitir OS
-         emitirOS();
+        //botao para emitir OS
+        emitirOS();
     }//GEN-LAST:event_btnCreateActionPerformed
 
     private void btnReadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReadActionPerformed
@@ -651,12 +654,13 @@ public class TelaOs extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnReadActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-         // chamando metodo altera os
-         alterarOS();
+        // chamando metodo altera os
+        alterarOS();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
+        // chamando o metodo para deletar OS
+        deletarOs();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
@@ -682,7 +686,7 @@ public class TelaOs extends javax.swing.JInternalFrame {
         // criado para predefinir na tabela pois no bdd ele não é nullo entao tem que ser preenchido
         // atribuindo um texto a variavel tipo se selecionado para preencher no bdd
         tipo = "Ordem de serviço";
-        
+
     }//GEN-LAST:event_rbtOsActionPerformed
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
@@ -690,7 +694,7 @@ public class TelaOs extends javax.swing.JInternalFrame {
         rbtOrc.setSelected(true);
         // preenchendo no bdd
         tipo = "Orçamento";
-       
+
     }//GEN-LAST:event_formInternalFrameOpened
 
 

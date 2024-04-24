@@ -9,6 +9,7 @@ import java.sql.*;
 import br.com.infox.dal.ModuloConexao;
 import javax.swing.JOptionPane;
 import java.awt.Color;
+import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -74,14 +75,18 @@ public class TelaOs extends javax.swing.JInternalFrame {
             pst.setString(7, txtOsValor.getText().replace(",", "."));
             pst.setString(8, txtclienteID.getText());
 
-            if ((txtclienteID.getText().isEmpty()) || (txtOsEquip.getText().isEmpty()) || (txtDef.getText().isEmpty())) {
+            if (txtclienteID.getText().isEmpty() || txtOsEquip.getText().isEmpty() || txtDef.getText().isEmpty() || cboxOsSit.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios !");
 
             } else {
                 int adicionado = pst.executeUpdate();
                 if (adicionado > 0) {
                     JOptionPane.showMessageDialog(null, "Ordem de serviço emitida com sucesso !");
-                    clearFields();
+                        btnCreate.setEnabled(false);
+                        btnRead.setEnabled(false);
+                        btnPrint.setEnabled(true);
+                        
+                        
 
                 }
             }
@@ -134,6 +139,12 @@ public class TelaOs extends javax.swing.JInternalFrame {
 
                 //visibilidade da tabela
                 tblclientesOS.setVisible(false);
+                
+                // altera visibilidade ao pesquisar ordem de serviço
+                btnRead.setEnabled(false);
+                btnUpdate.setEnabled(true);
+                btnPrint.setEnabled(true);
+                btnDelete.setEnabled(true);
 
             } else {
                 JOptionPane.showMessageDialog(null, "Ordem de serviço não cadastrada");
@@ -162,7 +173,7 @@ public class TelaOs extends javax.swing.JInternalFrame {
             // .replace substitui a virgula pelo ponto.
             pst.setString(7, txtOsValor.getText().replace(",", "."));
             pst.setString(8, txtclienteID.getText());
-            if ((txtclienteID.getText().isEmpty()) || (txtOsEquip.getText().isEmpty()) || (txtDef.getText().isEmpty())) {
+            if (txtclienteID.getText().isEmpty() || txtOsEquip.getText().isEmpty() || txtDef.getText().isEmpty() || cboxOsSit.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios !");
 
             } else {
@@ -215,6 +226,15 @@ public class TelaOs extends javax.swing.JInternalFrame {
             }
         }
     }
+    
+    public void gerenciarBtn(){
+        // desabilitar os botões
+        btnUpdate.setEnabled(false);
+        btnDelete.setEnabled(false);
+        btnPrint.setEnabled(false);
+        
+    }
+    
 
     // limpando campos
     private void clearFields() {
@@ -226,6 +246,12 @@ public class TelaOs extends javax.swing.JInternalFrame {
         txtOsTec.setText(null);
         txtOsValor.setText(null);
         txtclienteID.setText(null);
+        txtPesquisaCliente.setText(null);
+        cboxOsSit.setSelectedItem(" ");
+        
+        // limpando tabela 
+        DefaultTableModel model = (DefaultTableModel) tblclientesOS.getModel();
+        model.setRowCount(0);
 
     }
 
@@ -371,9 +397,9 @@ public class TelaOs extends javax.swing.JInternalFrame {
         );
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jLabel3.setText("Situação");
+        jLabel3.setText("*Situação");
 
-        cboxOsSit.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Na bancada", "Entrega Ok", "Orçamento REPROVADO", "Aguardando APROVAÇÃO", "Aguardando peças", "Abandonado pelo client", "Retornou" }));
+        cboxOsSit.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Na bancada", "Entrega Ok", "Orçamento REPROVADO", "Aguardando APROVAÇÃO", "Aguardando peças", "Abandonado pelo client", "Retornou" }));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cliente", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 14))); // NOI18N
         jPanel2.setToolTipText("");
@@ -458,10 +484,10 @@ public class TelaOs extends javax.swing.JInternalFrame {
         jLabel7.setText("*Defeito");
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel8.setText("*Serviço");
+        jLabel8.setText("Serviço");
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel9.setText("*Técnico");
+        jLabel9.setText("Técnico");
 
         iconeService.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
         iconeService.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/tool.png"))); // NOI18N
@@ -483,6 +509,7 @@ public class TelaOs extends javax.swing.JInternalFrame {
         });
 
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/Update.png"))); // NOI18N
+        btnUpdate.setEnabled(false);
         btnUpdate.setMaximumSize(new java.awt.Dimension(48, 48));
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -491,6 +518,7 @@ public class TelaOs extends javax.swing.JInternalFrame {
         });
 
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/Delete.png"))); // NOI18N
+        btnDelete.setEnabled(false);
         btnDelete.setMaximumSize(new java.awt.Dimension(48, 48));
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -499,6 +527,7 @@ public class TelaOs extends javax.swing.JInternalFrame {
         });
 
         btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/infox/icones/print.png"))); // NOI18N
+        btnPrint.setEnabled(false);
         btnPrint.setMaximumSize(new java.awt.Dimension(48, 48));
         btnPrint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
